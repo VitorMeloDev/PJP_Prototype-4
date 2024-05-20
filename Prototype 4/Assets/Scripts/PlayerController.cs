@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TreeEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -26,6 +27,8 @@ public class PlayerController : MonoBehaviour
         playerRb.AddForce(focalPoint.transform.forward * speed * forwardInput);
 
         powerupIndicator.transform.position = transform.position + new Vector3(0,-0.5f,0);
+
+        if(transform.position.y < -10){SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);}
     }
 
     IEnumerator PowerupCountdownRoutine()
@@ -39,10 +42,8 @@ public class PlayerController : MonoBehaviour
     {
         if(other.gameObject.CompareTag("Enemy") && hasPowerup)
         {
-            Debug.Log("Collided with " + other.gameObject.name + " with powerup set to " + hasPowerup);
             Rigidbody enemyRb = other.gameObject.GetComponent<Rigidbody>();
             Vector3 awayPlayer = (other.transform.position - transform.position);
-
             enemyRb.AddForce(awayPlayer * powerupStrength, ForceMode.Impulse);
         }    
     }
